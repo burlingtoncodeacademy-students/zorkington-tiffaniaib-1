@@ -116,8 +116,13 @@ function printInventory(item) {
 }
 
 function pickItem(item) {
-  player.inventory.push(item);
-  console.log(`Now ${item} is part of your inventory`);
+  let takeableItems = ["book"];
+  if (takeableItems.includes(item)){
+    player.inventory.push(item);
+    console.log(`Now ${item} is part of your inventory`);
+  } else {
+    console.log(`You can't pick ${item}`);
+  }
 }
 
 function dropItem(item) {
