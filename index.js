@@ -110,9 +110,12 @@ function transition(newRoom) {
   }
 }
 
-function printInventory(item) {
-  let stringInventory = item.inventory.toString(', '); //we turn the inventory (arr) into a string using the method toString()
-  console.log(`You are carrying: ${stringInventory} `);
+function printInventory() {
+  if (player.inventory.length === 0) {
+    console.log(`Your inventory is empty.`);
+  } else {
+    console.log(`You are carrying: ${player.inventory.join(', ')}`); // we combined all the elements of the array into a string with ".join()" 
+  }
 }
 
 function pickItem(item) {
@@ -164,7 +167,7 @@ On the door is a handwritten sign.`
       pickItem(thing);
     }
     else if (commandLookup.inventory.includes(command)) {
-      printInventory(thing);
+      printInventory();
     }
     else if (commandLookup.drop.includes(command)) {
       dropItem(thing);
