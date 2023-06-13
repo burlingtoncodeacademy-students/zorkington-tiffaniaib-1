@@ -42,16 +42,13 @@ let street = new Room(
 );
 
 let foyer = new Room(
-  `INTRO: 182 Main St.
-  You are standing on Main Street between Church and South Winooski.
-  There is a door here. A keypad sits on the handle.
-  On the door is a handwritten sign`,
+  `You find yourself standing in a grand foyer, the entrance to a mysterious mansion: the interior looks much bigger than expected`,
   "foyer",
   [],
 );
 // ============================================================    ITEMS     ======================================================================================
 let sign = {
-  description: "Welcome to Burlington Code Academy! Come on up to the third floor.\nIf the door is locked, use the code 12345.",
+  description: `This door, guarding the secrets within, remains firmly locked.\nIf you are worth it of this journey, these numbers aligned in perfect harmony shall grant you passage: 12345`,
   read: function () {
     return `${this.description}`;
   }
@@ -67,7 +64,7 @@ let locationStates = {
   'greenhouse': 'library'
 }
 
-let locationCurrent = null;
+let locationCurrent = "street";
 // ======================================================    LOOKUP TABLES    ===================================================================================
 const commandLookup = {
   inventory: ['i', 'inventory'],
@@ -82,6 +79,7 @@ const commandLookup = {
 const roomLookup = {
   street: street,
   foyer: foyer
+  // library: library
 }
 
 const itemLookup = {
@@ -93,14 +91,14 @@ const itemLookup = {
 // }
 
 function transition(newRoom) {
-  const currentRoom = locationStates[locationCurrent];
-  const newLocation = locationStates[newRoom];
+  const validTransitions = locationStates[locationCurrent];
+  const newLocation = roomLookup[newRoom];
 
-  if (currentRoom.connections.includes(newRoom)) {
+  if (validTransitions.includes(newRoom)) {
     // if the door is not locked
-    if (!newLocation.locked) {  
+    if (newLocation.isLocked === false) {
       locationCurrent = newRoom;
-      console.log(`You walk to the ${newRoom}\n${newLocation.description}`);
+      console.log(`You walk to the ${newRoom}.\n${newLocation.description}`);
     } else {
       // if it's locked
       console.log(`The door is locked. You can't go this way.`);
@@ -136,10 +134,12 @@ function useItem(item) {
   console.log(`You use the ${item}`);
 }
 
-function openDoor(item) {
-  const doorStatus = //;
+function openDoor() {
+  const currentRoom = roomLookup[locationCurrent]; // Get the current room object
+  if (currentRoom.isLocked === true) {
     console.log(`Perfect! Now the door opens.`);
-  doorStatus = true;
+    locationCurrent.isLocked = false;
+  }
 }
 
 
@@ -184,7 +184,8 @@ On the door is a handwritten sign.`
       }
     }
     else if (command.includes('12345')) {
-
+        openDoor();
+        transition("foyer");
     } else {
       console.log(`I don't know how to ${command}, please try a different command`);
     }
